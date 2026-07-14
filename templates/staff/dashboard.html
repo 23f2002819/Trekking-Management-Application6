@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Staff Dashboard</h2>
+
+{% if treks %}
+    {% for trek in treks %}
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">{{ trek.name }} — {{ trek.location }}</h5>
+        </div>
+        <div class="card-body">
+            <p>Difficulty: <strong>{{ trek.difficulty }}</strong></p>
+            <p>Slots: <strong>{{ trek.available_slots }}/{{ trek.total_slots }}</strong></p>
+            <p>Status: <strong>{{ trek.status }}</strong></p>
+
+            <form method="POST" action="{{ url_for('staff.update_trek', trek_id=trek.id) }}">
+                <div class="row g-2">
+                    <div class="col-md-3">
+                        <label>Available Slots</label>
+                        <input type="number" name="available_slots" class="form-control" value="{{ trek.available_slots }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Status</label>
+                        <select name="status" class="form-select">
+                            {% if trek.status == 'Approved' %}
+                                <option value="Approved" selected>Approved</option>
+                                <option value="Open">Open</option>
+                            {% elif trek.status == 'Open' %}
+                                <option value="Open" selected>Open</option>
+                                <option value="Closed">Closed</option>
+                                <option value="Completed">Completed</option>
+                            {% elif trek.status == 'Closed' %}
+                                <option value="Closed" selected>Closed</option>
+                                <option value="Open">Open</option>
+                                <option value="Completed">Completed</option>
+                            {% else %}
+                                <option value="{{ trek.status }}" selected>{{ trek.status }}</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-dark w-100">Update</button>
+                    </div>
+                </div>
+            </form>
+
+            <a href="{{ url_for('staff.participants', trek_id=trek.id) }}" class="btn btn-outline-dark mt-3">View Participants</a>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <p>there is no tracks till now</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Available Treks</h2>
+
+<form method="GET" action="{{ url_for('user.dashboard') }}" class="row g-2 mb-4">
+    <div class="col-md-3">
+        <select name="difficulty" class="form-select">
+            <option value="">All Difficulties</option>
+            <option value="Easy">Easy</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Hard">Hard</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <input type="text" name="location" class="form-control" placeholder="Search location...">
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-dark w-100">Filter</button>
+    </div>
+    <div class="col-md-2">
+        <a href="{{ url_for('user.dashboard') }}" class="btn btn-outline-secondary w-100">Reset</a>
+    </div>
+</form>
+
+{% if treks %}
+<div class="row">
+    {% for trek in treks %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">{{ trek.name }}</h5>
+            </div>
+            <div class="card-body">
+                <p>📍 {{ trek.location }}</p>
+                <p>⚡ {{ trek.difficulty }}</p>
+                <p>📅 {{ trek.duration }} days</p>
+                <p>🪑 Slots: {{ trek.available_slots }}/{{ trek.total_slots }}</p>
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('user.book_trek', trek_id=trek.id) }}" class="btn btn-dark w-100">Book Now</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>there are  no open tracks here</p>
+{% endif %}
+{% endblock %}

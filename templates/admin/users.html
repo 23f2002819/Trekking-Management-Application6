@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">User Management</h2>
+
+{% if users %}
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phone or '—' }}</td>
+            <td>
+                {% if user.status == 'active' %}
+                    <span class="badge bg-success">Active</span>
+                {% else %}
+                    <span class="badge bg-danger">Blacklisted</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if user.status == 'active' %}
+                    <a href="{{ url_for('admin.blacklist_user', user_id=user.id) }}" class="btn btn-sm btn-danger">Blacklist</a>
+                {% else %}
+                    <a href="{{ url_for('admin.unblock_user', user_id=user.id) }}" class="btn btn-sm btn-success">Unblock</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No users registered yet.</p>
+{% endif %}
+{% endblock %}

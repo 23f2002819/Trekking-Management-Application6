@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Participants — {{ trek.name }}</h2>
+
+{% if bookings %}
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Booking ID</th>
+            <th>User ID</th>
+            <th>Booking Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ booking.id }}</td>
+            <td>{{ booking.user_id }}</td>
+            <td>{{ booking.booking_date.strftime('%d-%m-%Y') }}</td>
+            <td>{{ booking.status }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No participate till now</p>
+{% endif %}
+
+<a href="{{ url_for('staff.dashboard') }}" class="btn btn-dark mt-3">Back</a>
+{% endblock %}

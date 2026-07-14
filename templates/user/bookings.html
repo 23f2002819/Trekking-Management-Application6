@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">My Bookings</h2>
+
+{% if booking_data %}
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Booking ID</th>
+            <th>Trek Name</th>
+            <th>Location</th>
+            <th>Trek Status</th>
+            <th>Booking Date</th>
+            <th>Booking Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in booking_data %}
+        <tr>
+            <td>{{ item.booking.id }}</td>
+            <td>{{ item.trek.name }}</td>
+            <td>{{ item.trek.location }}</td>
+            <td>{{ item.trek.status }}</td>
+            <td>{{ item.booking.booking_date.strftime('%d-%m-%Y') }}</td>
+            <td>
+                {% if item.booking.status == 'Booked' %}
+                    <span class="badge bg-success">Booked</span>
+                {% elif item.booking.status == 'Cancelled' %}
+                    <span class="badge bg-danger">Cancelled</span>
+                {% else %}
+                    <span class="badge bg-secondary">Completed</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if item.booking.status == 'Booked' %}
+                    <a href="{{ url_for('user.cancel_booking', booking_id=item.booking.id) }}" class="btn btn-sm btn-danger">Cancel</a>
+                {% else %}
+                    <span class="text-muted">—</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Koi booking nahi hai abhi.</p>
+{% endif %}
+
+<a href="{{ url_for('user.dashboard') }}" class="btn btn-dark mt-3">Browse Treks</a>
+{% endblock %}

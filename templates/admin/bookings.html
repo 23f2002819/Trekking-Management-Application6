@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">All Bookings</h2>
+
+{% if booking_data %}
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Booking ID</th>
+            <th>User Name</th>
+            <th>Trek Name</th>
+            <th>Booking Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in booking_data %}
+        <tr>
+            <td>{{ item.booking.id }}</td>
+            <td>{{ item.user.name }}</td>
+            <td>{{ item.trek.name }}</td>
+            <td>{{ item.booking.booking_date.strftime('%d-%m-%Y') }}</td>
+            <td>
+                {% if item.booking.status == 'Booked' %}
+                    <span class="badge bg-success">Booked</span>
+                {% elif item.booking.status == 'Cancelled' %}
+                    <span class="badge bg-danger">Cancelled</span>
+                {% else %}
+                    <span class="badge bg-secondary">Completed</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Koi booking nahi hai abhi.</p>
+{% endif %}
+{% endblock %}
